@@ -16,7 +16,7 @@ class ClientSocket():
         else:
             raise Exception( "Mode has to be `tcp` or `udp`" )
 
-        if port > 65536:
+        if port > 65535:
             raise Exception( "Port is out of range" )
 
     def start( self ):
