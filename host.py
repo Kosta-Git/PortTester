@@ -1,36 +1,78 @@
 import socket
+import parser
 
 
-class TCPSocket:
-    def __init__( ip, port, buffer_size=1024 ):
+class ServerSocket:
+    def __init__( self, ip:str, port:int, buffer_size:int, mode:str ):
         self.__ip   = ip
         self.__port = port
         self.__buff = buffer_size
+        self.__mode = mode.lower()
 
-        self.__socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+        if mode.lower() == "udp":
+            self.__socket = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+        elif mode.lower() == "tcp":
+            self.__socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+        else:
+            raise Exception( "Mode has to be `tcp` or `udp`" )
+
+        if port > 65536:
+            raise Exception( "Port is out of range" )
 
     def start( self ):
+        if self.__mode == "tcp":
+            self.__start_tcp()
+        else:
+            self.__start_udp()
+    
+    def __start_tcp( self ):
         self.__socket.bind( ( self.__ip, self.__port ) )
+        
         self.__socket.listen( 1 )
-
         conn, addr = self.__socket.accept()
-        print( f"Connection from: {addr}" )
+        print( f"Connection from: {addr[0]}" )
 
         while True:
             packet = conn.recv( self.__buff )
 
-            if data is None:
+            if packet is None or packet == b'':
                 break
 
-            print( f"Received:\n {data}" )
+            print( f"Received:\n\t {str( packet )}" )
 
-            conn.send( data )
+            conn.send( packet )
         
         conn.close()
+    
+    def __start_udp( self ):
+        self.__socket.bind( ( self.__ip, self.__port ) )
+
+        while True:
+            packet = self.__socket.recvfrom( self.__buff )
+
+            if packet[0] is None or packet[0] == b'':
+                break
+
+            print( f"Received:\n\t {str( packet[0] )}" )
+
+            self.__socket.sendto( packet[0], packet[1] )
+
 
 if __name__ == "__main__":
-    server = TCPSocket( "127.0.0.1", 443, 1024 )
+    args = parser.parse()
 
-    print( "Starting TCP server!" )
-    server.start()
-    print( "Closed TCP server..." )
+    try:
+        server = ServerSocket( "127.0.0.1", args.port, 1024, args.mode )
+    except Exception as e:
+        print( f"An error occured when creating the socket:\n {e}" )
+        exit( 1 )
+
+    print( f"Starting {args.mode} socket!" )
+
+    try:
+        server.start()
+    except Exception as e:
+        print( f"An error occured when binding the socket:\n {e}" )
+        exit( 1 )
+
+    print( f"Closed {args.mode} socket..." )
