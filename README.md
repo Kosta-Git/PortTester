@@ -7,6 +7,7 @@
 `python3 host.py -m UDP -p 666`
 
 `-m` or `--mode` takes udp or tcp
+
 `-p` or `--port` takes a port number
 
 NOTE: This script requires admin privileges!
