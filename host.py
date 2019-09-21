@@ -62,7 +62,7 @@ if __name__ == "__main__":
     args = parser.parse()
 
     try:
-        server = ServerSocket( "127.0.0.1", args.port, 1024, args.mode )
+        server = ServerSocket( args.ip, args.port, 1024, args.mode )
     except Exception as e:
         print( f"An error occured when creating the socket:\n {e}" )
         exit( 1 )

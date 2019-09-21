@@ -36,7 +36,7 @@ if __name__ == "__main__":
     args = parser.parse()
 
     try:
-        client = ClientSocket( "127.0.0.1", args.port, 1024, args.mode )
+        client = ClientSocket( args.ip, args.port, 1024, args.mode )
     except Exception as e:
         print( f"An error occured when creating the socket:\n {e}" )
         exit( 1 )

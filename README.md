@@ -17,7 +17,10 @@ NOTE: This script requires admin privileges!
 `python3 client.py -m UDP -p 666`
 
 `-m` or `--mode` takes udp or tcp
+
 `-p` or `--port` takes a port number
+
+`-i` or `--ip` takes an ip (optional default is 127.0.0.1)
 
 NOTE: This script requires admin privileges!
 
