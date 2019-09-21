@@ -10,6 +10,8 @@
 
 `-p` or `--port` takes a port number
 
+`-i` or `--ip` takes an ip (optional default is 127.0.0.1) consider using 0.0.0.0
+
 NOTE: This script requires admin privileges!
 
 ### client.py usage
