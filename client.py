@@ -41,7 +41,7 @@ if __name__ == "__main__":
         print( f"An error occured when creating the socket:\n {e}" )
         exit( 1 )
 
-    print( "Starting TCP socket!" )
+    print( f"Starting {args.mode} socket!" )
 
     try:
         client.start()
@@ -49,4 +49,4 @@ if __name__ == "__main__":
         print( f"An error occured when starting the socket:\n {e}" )
         exit( 1 )
 
-    print( "Closed TCP socket..." )
+    print( f"Closed {args.mode} socket..." )

@@ -20,15 +20,16 @@ class ServerSocket:
             raise Exception( "Port is out of range" )
 
     def start( self ):
+        self.__bind()
+
         if self.__mode == "tcp":
             self.__start_tcp()
         else:
             self.__start_udp()
     
     def __start_tcp( self ):
-        self.__socket.bind( ( self.__ip, self.__port ) )
-        
         self.__socket.listen( 1 )
+
         conn, addr = self.__socket.accept()
         print( f"Connection from: {addr[0]}" )
 
@@ -45,8 +46,6 @@ class ServerSocket:
         conn.close()
     
     def __start_udp( self ):
-        self.__socket.bind( ( self.__ip, self.__port ) )
-
         while True:
             packet = self.__socket.recvfrom( self.__buff )
 
@@ -56,6 +55,12 @@ class ServerSocket:
             print( f"Received:\n\t {str( packet[0] )}" )
 
             self.__socket.sendto( packet[0], packet[1] )
+
+    def __bind( self ):
+        self.__socket.bind( ( self.__ip, self.__port ) )
+
+        socket_info = self.__socket.getsockname()
+        print( f"Socket bound.\n\tip: {socket_info[0]}\n\tport: {socket_info[1]}" )
 
 
 if __name__ == "__main__":
